@@ -1,0 +1,14 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: v4.3.8
+_src_path: https://github.com/jupyterlab/extension-template
+author_email: jupyter@googlegroups.com
+author_name: Jupyter Development Team
+has_binder: false
+has_settings: false
+kind: frontend
+labextension_name: jupyter-secrets-manager
+project_short_description: A JupyterLab extension to manage secrets.
+python_name: jupyter_secrets_manager
+repository: https://github.com/jupyterlab-contrib/jupyter-secrets-manager.git
+test: true
+
