@@ -2,9 +2,9 @@ import { IDataConnector } from '@jupyterlab/statedb';
 import { Token } from '@lumino/coreutils';
 
 export interface ISecret {
+  namespace: string;
   id: string;
   value: string;
-  namespace: string;
 }
 
 export interface ISecretsConnector extends IDataConnector<ISecret> {}
@@ -16,9 +16,12 @@ export const ISecretsConnector = new Token<ISecretsConnector>(
 
 export interface ISecretsManager {
   get(id: string): Promise<ISecret | undefined>;
-  set(secret: ISecret): Promise<void>;
+  set(id: string, secret: ISecret): Promise<void>;
   remove(id: string): Promise<void>;
   list(namespace: string): Promise<string[]>;
+  attach(namespace: string, id: string, input: HTMLInputElement): void;
+  detach(namespace: string, id: string): void;
+  detachAll(namespace: string): void;
 }
 
 export const ISecretsManager = new Token<ISecretsManager>(
