@@ -58,12 +58,15 @@ export class SecretsManager implements ISecretsManager {
     }
     this._attachedInputs.set(attachedId, input);
 
-    // Fill the password if the input is empty and a value is fetched by the data
-    // connector.
     input.dataset.secretsId = attachedId;
-    const value = await this.get(attachedId);
-    if (!input.value && value) {
-      input.value = value.value;
+    const secret = await this.get(attachedId);
+    if (!input.value && secret) {
+      // Fill the password if the input is empty and a value is fetched by the data
+      // connector.
+      input.value = secret.value;
+    } else if (input.value && input.value !== secret?.value) {
+      // Otherwise save the current input value using the data connector.
+      this.set(attachedId, { namespace, id, value: input.value });
     }
     input.addEventListener('change', this._onchange);
   }

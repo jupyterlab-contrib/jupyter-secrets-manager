@@ -23,5 +23,6 @@ const plugin: JupyterFrontEndPlugin<ISecretsManager> = {
   }
 };
 
+export * from './connectors/local-storage';
 export * from './token';
 export default plugin;
