@@ -1,6 +1,6 @@
 # jupyter_secrets_manager
 
-[![Github Actions Status](https://github.com/jupyterlab-contrib/jupyter-secrets-manager.git/workflows/Build/badge.svg)](https://github.com/jupyterlab-contrib/jupyter-secrets-manager.git/actions/workflows/build.yml)
+[![Github Actions Status](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/workflows/Build/badge.svg)](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/actions/workflows/build.yml)
 
 A JupyterLab extension to manage secrets.
 
