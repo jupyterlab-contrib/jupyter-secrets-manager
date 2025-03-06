@@ -48,11 +48,6 @@ export class SecretsManager implements ISecretsManager {
     const attachedId = `${namespace}:${id}`;
     const attachedInput = this._attachedInputs.get(attachedId);
 
-    // Do not attach the input if it is already attached.
-    if (attachedInput === input) {
-      return;
-    }
-
     // Detach the previous input.
     if (attachedInput) {
       this.detach(namespace, id);
