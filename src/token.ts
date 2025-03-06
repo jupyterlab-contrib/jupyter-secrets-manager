@@ -19,7 +19,12 @@ export interface ISecretsManager {
   set(id: string, secret: ISecret): Promise<void>;
   remove(id: string): Promise<void>;
   list(namespace: string): Promise<string[]>;
-  attach(namespace: string, id: string, input: HTMLInputElement): void;
+  attach(
+    namespace: string,
+    id: string,
+    input: HTMLInputElement,
+    callback?: (value: string) => void
+  ): void;
   detach(namespace: string, id: string): void;
   detachAll(namespace: string): void;
 }

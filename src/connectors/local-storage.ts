@@ -15,6 +15,7 @@ The secret connector used currently should not be used in production, since the
 passwords are stored as plain text in the local storage of the browser'
     `);
   }
+
   async fetch(id: string): Promise<ISecret | undefined> {
     const secrets = JSON.parse(localStorage.getItem(this.storage) ?? '{}');
     if (!secrets || !secrets[id]) {

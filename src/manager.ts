@@ -42,7 +42,8 @@ export class SecretsManager implements ISecretsManager {
   async attach(
     namespace: string,
     id: string,
-    input: HTMLInputElement
+    input: HTMLInputElement,
+    callback?: (value: string) => void
   ): Promise<void> {
     const attachedId = `${namespace}:${id}`;
     const attachedInput = this._attachedInputs.get(attachedId);
@@ -64,6 +65,10 @@ export class SecretsManager implements ISecretsManager {
       // Fill the password if the input is empty and a value is fetched by the data
       // connector.
       input.value = secret.value;
+      input.dispatchEvent(new Event('change'));
+      if (callback) {
+        callback(secret.value);
+      }
     } else if (input.value && input.value !== secret?.value) {
       // Otherwise save the current input value using the data connector.
       this.set(attachedId, { namespace, id, value: input.value });
