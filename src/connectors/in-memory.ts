@@ -23,12 +23,14 @@ export class InMemoryConnector implements ISecretsConnector {
     query?: string | undefined
   ): Promise<{ ids: string[]; values: ISecret[] }> {
     const ids: string[] = [];
+    const values: ISecret[] = [];
     this._secrets.forEach((value, key) => {
       if (value.namespace === query) {
         ids.push(key);
+        values.push(value);
       }
     });
-    return { ids, values: [] };
+    return { ids, values };
   }
 
   private _secrets = new Map<string, ISecret>();
