@@ -8,6 +8,10 @@ export interface ISecret {
 }
 
 export interface ISecretsConnector extends IDataConnector<ISecret> {}
+export interface ISecretsConnectorList<T = ISecret> {
+  ids: string[];
+  values: T[];
+}
 
 export const ISecretsConnector = new Token<ISecretsConnector>(
   'jupyter-secret-manager:connector',
@@ -18,7 +22,7 @@ export interface ISecretsManager {
   get(id: string): Promise<ISecret | undefined>;
   set(id: string, secret: ISecret): Promise<void>;
   remove(id: string): Promise<void>;
-  list(namespace: string): Promise<string[]>;
+  list(namespace: string): Promise<ISecretsConnectorList>;
   attach(
     namespace: string,
     id: string,

@@ -1,4 +1,9 @@
-import { ISecret, ISecretsConnector, ISecretsManager } from './token';
+import {
+  ISecret,
+  ISecretsConnector,
+  ISecretsConnectorList,
+  ISecretsManager
+} from './token';
 
 export namespace SecretsManager {
   export interface IOptions {
@@ -22,8 +27,8 @@ export class SecretsManager implements ISecretsManager {
     this._connector.remove(id);
   }
 
-  async list(namespace: string): Promise<string[]> {
-    return (await this._connector.list(namespace)).ids;
+  async list(namespace: string): Promise<ISecretsConnectorList> {
+    return await this._connector.list(namespace);
   }
 
   private _onchange = (e: Event): void => {
@@ -82,7 +87,7 @@ export class SecretsManager implements ISecretsManager {
 
   async detachAll(namespace: string): Promise<void> {
     const attachedIds = await this.list(namespace);
-    attachedIds.forEach(id => {
+    attachedIds.ids.forEach(id => {
       this.detach(namespace, id);
     });
   }
