@@ -10,24 +10,37 @@ export namespace SecretsManager {
     connector: ISecretsConnector;
   }
 }
+
 export class SecretsManager implements ISecretsManager {
   constructor(options: SecretsManager.IOptions) {
     this._connector = options.connector;
   }
 
   async get(id: string): Promise<ISecret | undefined> {
+    if (!this._connector.fetch) {
+      return;
+    }
     return this._connector.fetch(id);
   }
 
   async set(id: string, secret: ISecret): Promise<void> {
+    if (!this._connector.save) {
+      return;
+    }
     this._connector.save(id, secret);
   }
 
   async remove(id: string): Promise<void> {
+    if (!this._connector.remove) {
+      return;
+    }
     this._connector.remove(id);
   }
 
-  async list(namespace: string): Promise<ISecretsList> {
+  async list(namespace: string): Promise<ISecretsList | undefined> {
+    if (!this._connector.list) {
+      return;
+    }
     return await this._connector.list(namespace);
   }
 
