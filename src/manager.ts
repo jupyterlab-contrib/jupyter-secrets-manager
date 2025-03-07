@@ -78,18 +78,23 @@ export class SecretsManager implements ISecretsManager {
 
   detach(namespace: string, id: string): void {
     const attachedId = `${namespace}:${id}`;
+    this._detach(attachedId);
+  }
+
+  async detachAll(namespace: string): Promise<void> {
+    for (const id of this._attachedInputs.keys()) {
+      if (id.startsWith(`${namespace}:`)) {
+        this._detach(id);
+      }
+    }
+  }
+
+  private _detach(attachedId: string): void {
     const input = this._attachedInputs.get(attachedId);
     if (input) {
       input.removeEventListener('change', this._onchange);
     }
     this._attachedInputs.delete(attachedId);
-  }
-
-  async detachAll(namespace: string): Promise<void> {
-    const attachedIds = await this.list(namespace);
-    attachedIds.ids.forEach(id => {
-      this.detach(namespace, id);
-    });
   }
 
   private _connector: ISecretsConnector;

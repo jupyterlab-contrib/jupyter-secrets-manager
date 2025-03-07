@@ -28,9 +28,9 @@ export interface ISecretsManager {
     id: string,
     input: HTMLInputElement,
     callback?: (value: string) => void
-  ): void;
+  ): Promise<void>;
   detach(namespace: string, id: string): void;
-  detachAll(namespace: string): void;
+  detachAll(namespace: string): Promise<void>;
 }
 
 export const ISecretsManager = new Token<ISecretsManager>(
