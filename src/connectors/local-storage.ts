@@ -1,4 +1,4 @@
-import { ISecret, ISecretsConnector, ISecretsConnectorList } from '../token';
+import { ISecret, ISecretsConnector, ISecretsList } from '../token';
 
 /**
  * Example connector that save the secrets to the local storage.
@@ -36,9 +36,9 @@ passwords are stored as plain text in the local storage of the browser'
     localStorage.setItem(this.storage, JSON.stringify(secrets));
   }
 
-  async list(query?: string | undefined): Promise<ISecretsConnectorList> {
+  async list(query?: string | undefined): Promise<ISecretsList> {
     const secrets = JSON.parse(localStorage.getItem(this.storage) ?? '{}');
-    const initialValue: ISecretsConnectorList = { ids: [], values: [] };
+    const initialValue: ISecretsList = { ids: [], values: [] };
     return Object.keys(secrets)
       .filter(key => secrets[key].namespace === query)
       .reduce((acc, cur) => {

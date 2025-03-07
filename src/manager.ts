@@ -1,7 +1,7 @@
 import {
   ISecret,
   ISecretsConnector,
-  ISecretsConnectorList,
+  ISecretsList,
   ISecretsManager
 } from './token';
 
@@ -27,7 +27,7 @@ export class SecretsManager implements ISecretsManager {
     this._connector.remove(id);
   }
 
-  async list(namespace: string): Promise<ISecretsConnectorList> {
+  async list(namespace: string): Promise<ISecretsList> {
     return await this._connector.list(namespace);
   }
 

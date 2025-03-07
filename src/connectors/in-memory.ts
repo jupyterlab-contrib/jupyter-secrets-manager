@@ -1,4 +1,4 @@
-import { ISecret, ISecretsConnector, ISecretsConnectorList } from '../token';
+import { ISecret, ISecretsConnector, ISecretsList } from '../token';
 
 /**
  * An in memory password connector to store passwords during the session.
@@ -19,7 +19,7 @@ export class InMemoryConnector implements ISecretsConnector {
     this._secrets.delete(id);
   }
 
-  async list(query?: string | undefined): Promise<ISecretsConnectorList> {
+  async list(query?: string | undefined): Promise<ISecretsList> {
     const ids: string[] = [];
     const values: ISecret[] = [];
     this._secrets.forEach((value, key) => {
