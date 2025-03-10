@@ -7,7 +7,7 @@ export interface ISecret {
   value: string;
 }
 
-export interface ISecretsConnector extends IDataConnector<ISecret> {}
+export interface ISecretsConnector extends Partial<IDataConnector<ISecret>> {}
 export interface ISecretsList<T = ISecret> {
   ids: string[];
   values: T[];
@@ -22,7 +22,7 @@ export interface ISecretsManager {
   get(id: string): Promise<ISecret | undefined>;
   set(id: string, secret: ISecret): Promise<void>;
   remove(id: string): Promise<void>;
-  list(namespace: string): Promise<ISecretsList>;
+  list(namespace: string): Promise<ISecretsList | undefined>;
   attach(
     namespace: string,
     id: string,
