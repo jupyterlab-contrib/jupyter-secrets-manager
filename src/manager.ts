@@ -1,3 +1,5 @@
+import { PromiseDelegate } from '@lumino/coreutils';
+
 import {
   ISecret,
   ISecretsConnector,
@@ -26,6 +28,12 @@ export class SecretsManager implements ISecretsManager {
    */
   constructor(options: SecretsManager.IOptions) {
     this._connector = options.connector;
+    this._ready = new PromiseDelegate<void>();
+    this._ready.resolve();
+  }
+
+  get ready(): Promise<void> {
+    return this._ready.promise;
   }
 
   /**
@@ -49,6 +57,7 @@ export class SecretsManager implements ISecretsManager {
     if (!this._connector.list) {
       return;
     }
+    await this._ready.promise;
     return await this._connector.list(namespace);
   }
 
@@ -85,7 +94,7 @@ export class SecretsManager implements ISecretsManager {
       // Fill the password if the input is empty and a value is fetched by the data
       // connector.
       input.value = secret.value;
-      input.dispatchEvent(new Event('change'));
+      input.dispatchEvent(new Event('input'));
       if (callback) {
         callback(secret.value);
       }
@@ -93,7 +102,7 @@ export class SecretsManager implements ISecretsManager {
       // Otherwise save the current input value using the data connector.
       this._set(attachedId, { namespace, id, value: input.value });
     }
-    input.addEventListener('change', this._onchange);
+    input.addEventListener('input', this._onInput);
   }
 
   /**
@@ -121,6 +130,7 @@ export class SecretsManager implements ISecretsManager {
     if (!this._connector.fetch) {
       return;
     }
+    await this._ready.promise;
     return this._connector.fetch(id);
   }
 
@@ -144,10 +154,11 @@ export class SecretsManager implements ISecretsManager {
     this._connector.remove(id);
   }
 
-  /**
-   * Function triggered when the input value changed.
-   */
-  private _onchange = (e: Event): void => {
+  private _onInput = async (e: Event): Promise<void> => {
+    // Wait for an hypothetic current password saving.
+    await this._ready.promise;
+    // Reset the ready status.
+    this._ready = new PromiseDelegate<void>();
     const target = e.target as HTMLInputElement;
     const attachedId = target.dataset.secretsId;
     if (attachedId) {
@@ -155,9 +166,11 @@ export class SecretsManager implements ISecretsManager {
       const namespace = splitId.shift();
       const id = splitId.join(':');
       if (namespace && id) {
-        this._set(attachedId, { namespace, id, value: target.value });
+        await this._set(attachedId, { namespace, id, value: target.value });
       }
     }
+    // resolve the ready status.
+    this._ready.resolve();
   };
 
   /**
@@ -166,13 +179,14 @@ export class SecretsManager implements ISecretsManager {
   private _detach(attachedId: string): void {
     const input = this._attachedInputs.get(attachedId);
     if (input) {
-      input.removeEventListener('change', this._onchange);
+      input.removeEventListener('input', this._onInput);
     }
     this._attachedInputs.delete(attachedId);
   }
 
   private _connector: ISecretsConnector;
   private _attachedInputs = new Map<string, HTMLInputElement>();
+  private _ready: PromiseDelegate<void>;
 }
 
 namespace Private {
