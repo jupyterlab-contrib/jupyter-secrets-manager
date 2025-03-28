@@ -2,6 +2,23 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.2.0
+
+([Full Changelog](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/compare/v0.1.1...fcdb370894556749ec739a619e8e105bc65e176c))
+
+### Enhancements made
+
+- Add the namespace argument in public functions accessing the secrets [#7](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/7) ([@brichet](https://github.com/brichet))
+- Enhance the secrets storage [#6](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/6) ([@brichet](https://github.com/brichet))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/graphs/contributors?from=2025-03-10&to=2025-03-28&type=c))
+
+[@brichet](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Abrichet+updated%3A2025-03-10..2025-03-28&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.1.1
 
 ([Full Changelog](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/compare/05c54a51c32c733fa9a404abf4442970be7679f2...fe9fac537061286c02c0a93e7b3002140fdd74d3))
@@ -25,5 +42,3 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/graphs/contributors?from=2025-03-03&to=2025-03-10&type=c))
 
 [@brichet](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Abrichet+updated%3A2025-03-03..2025-03-10&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Ajtpio+updated%3A2025-03-03..2025-03-10&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
