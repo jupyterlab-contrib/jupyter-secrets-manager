@@ -72,6 +72,32 @@ In development mode, you will also need to remove the symlink created by `jupyte
 command. To find its location, you can run `jupyter labextension list` to figure out where the `labextensions`
 folder is located. Then you can remove the symlink named `jupyter-secrets-manager` within that folder.
 
+### Docker Development
+
+In project root folder, use the following command to create a docker container with a volumn of this project.
+
+```bash
+docker run -d --name jupyter-secrets-manager -p 8888:8888 -p 8000:8000 -v $(pwd):/workspace --user root quay.io/jupyter/base-notebook:latest jupyter lab --ip=0.0.0.0 --allow-root --no-browser --NotebookApp.token='my-token'
+```
+
+then you could open localhost:8888 to see the jupyterlab page.
+
+open a terminal in JupyterLab, run the following command to develop install jupyter secrets manager package
+
+```bash
+cd /workspace
+pip install -e "."
+jupyter labextension develop . --overwrite
+```
+
+then run the following in laptop terminal to restart the docker container
+
+```bash
+docker stop jupyter-secrets-manager && docker start jupyter-secrets-manager
+```
+
+After restart, you will see jupyter-secrets-manger is already installed, and your changes for python file will automatically take effect,for typescript change, you will need to either rebuild it by `jlpm build` or watch it by `jlpm watch`
+
 ### Testing the extension
 
 #### Frontend tests
