@@ -50,6 +50,18 @@ export class SecretsManager implements ISecretsManager {
     return this._set(Private.buildSecretId(namespace, id), secret);
   }
 
+  async listNamespaces(): Promise<string[]> {
+    if (!this._connector.list) {
+      return [];
+    }
+    await this._ready.promise;
+    const secrets = await this._connector.list();
+    const namespaces = Array.from(
+      new Set(secrets.ids.map(id => id.split(':')[0]))
+    );
+    return namespaces;
+  }
+
   /**
    * List the secrets for a namespace as a ISecretsList.
    */

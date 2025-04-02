@@ -23,10 +23,11 @@ export class InMemoryConnector implements ISecretsConnector {
     const ids: string[] = [];
     const values: ISecret[] = [];
     this._secrets.forEach((value, key) => {
-      if (value.namespace === query) {
-        ids.push(key);
-        values.push(value);
+      if (query && value.namespace !== query) {
+        return;
       }
+      ids.push(key);
+      values.push(value);
     });
     return { ids, values };
   }

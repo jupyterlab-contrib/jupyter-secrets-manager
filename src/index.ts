@@ -5,6 +5,9 @@ import {
 import { SecretsManager } from './manager';
 import { ISecretsConnector, ISecretsManager } from './token';
 import { InMemoryConnector } from './connectors';
+import { SecretsManagerWidget } from './components/SecretsPanel';
+import { Panel } from '@lumino/widgets';
+import { lockIcon } from '@jupyterlab/ui-components';
 
 /**
  * A basic secret connector extension, that should be disabled to provide a new
@@ -34,7 +37,17 @@ const manager: JupyterFrontEndPlugin<ISecretsManager> = {
     connector: ISecretsConnector
   ): ISecretsManager => {
     console.log('JupyterLab extension jupyter-secrets-manager is activated!');
-    return new SecretsManager({ connector });
+    const secretsManager = new SecretsManager({ connector });
+    const panel = new Panel();
+    panel.id = 'jupyter-secrets-manager:panel';
+    panel.title.icon = lockIcon;
+    const secretsManagerWidget = new SecretsManagerWidget({
+      manager: secretsManager
+    });
+    panel.addWidget(secretsManagerWidget);
+    app.shell.add(panel, 'left');
+
+    return secretsManager;
   }
 };
 

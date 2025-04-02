@@ -40,7 +40,7 @@ passwords are stored as plain text in the local storage of the browser'
     const secrets = JSON.parse(localStorage.getItem(this.storage) ?? '{}');
     const initialValue: ISecretsList = { ids: [], values: [] };
     return Object.keys(secrets)
-      .filter(key => secrets[key].namespace === query)
+      .filter(key => !query || secrets[key].namespace === query)
       .reduce((acc, cur) => {
         acc.ids.push(cur);
         acc.values.push(secrets[cur]);

@@ -70,6 +70,10 @@ export interface ISecretsManager {
    * Detach all attached input for a namespace.
    */
   detachAll(namespace: string): Promise<void>;
+  /**
+   * List all namespaces.
+   */
+  listNamespaces(): Promise<string[]>;
 }
 
 /**

@@ -59,7 +59,8 @@
         "@jupyterlab/application": "^4.0.0",
         "@jupyterlab/statedb": "^4.0.0",
         "@lumino/algorithm": "^2.0.0",
-        "@lumino/coreutils": "^2.1.2"
+        "@lumino/coreutils": "^2.1.2",
+        "@lumino/widgets": "^2.0.0"
     },
     "devDependencies": {
         "@jupyterlab/builder": "^4.0.0",
