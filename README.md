@@ -4,6 +4,46 @@
 
 A JupyterLab extension to manage secrets.
 
+> [!WARNING]
+> This extension is still very much experimental. Features and APIs are subject to change quickly.
+
+## Overview
+
+The two main plugins of this extension are the `SecretsManager` and the `SecretsConnector`.
+
+### Secrets manager
+
+The manager be the only interface for extensions / users to retrieve secrets.
+
+It knows only one connector, its role is to act as an interface between an extension / user / input
+and the secrets connector.
+
+Extension should not query directly the secrets connector. All requests for secrets must go through the manager.
+
+### Secrets connector
+
+The secrets connector is the one that fetches and saves secrets. It partially implements the `Jupyterlab`
+[IDataConnector](https://github.com/jupyterlab/jupyterlab/blob/a911ae622d507313e26da77f1adc042c0b60b962/packages/statedb/src/dataconnector.ts#L28).
+Given a secrets ID, the connector should return the associated secrets.
+
+By default, the extension provides an 'in memory' secrets connector: secrets are stored only during the current session.
+
+The secrets connector is provided by a plugin (with a token). This means that a third party extension can disable the
+default one and provide a new connector (to fetch secrets from a remote server for example).
+
+## Features
+
+### Associating inputs and secrets
+
+Any third party extension can associate an HTML input element to a secret, using the `attach()` method of the manager.
+It requires a `namespace` and `id` to link the input with a "unique" ID.
+This association should be done when the input is attached to the DOM.
+
+Associating an input to an `namespace`/`id` triggers a fetch on the secrets connector. If a secrets is fetched, the
+input is filled with the value of that secret.
+
+When the user updates manually the input, it triggers a save of the secret by the secrets connector.
+
 ## Requirements
 
 - JupyterLab >= 4.0.0
