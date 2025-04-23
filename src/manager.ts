@@ -29,9 +29,6 @@ export class SecretsManager implements ISecretsManager {
    * This is to prevent malicious extensions to get passwords when they are saved.
    */
   setConnector(value: ISecretsConnector): void {
-    if (Private.getConnector() !== null) {
-      Private.lock('A connector was already provided to the secrets manager');
-    }
     Private.setConnector(value);
   }
 
@@ -77,7 +74,7 @@ export class SecretsManager implements ISecretsManager {
       return;
     }
     await this._ready.promise;
-    return await connector.list(namespace);
+    return connector.list(namespace);
   }
 
   /**
@@ -178,7 +175,7 @@ export class SecretsManager implements ISecretsManager {
     if (!connector?.remove) {
       return;
     }
-    connector.remove(id);
+    return connector.remove(id);
   }
 
   private _onInput = async (e: Event): Promise<void> => {
@@ -228,7 +225,8 @@ export class SecretsManager implements ISecretsManager {
  */
 export namespace SecretsManager {
   /**
-   * A function that protect the secrets namespaces from other plugins.
+   * A function that protects the secrets namespace of the signed plugin from
+   * other plugins.
    *
    * @param id - the secrets namespace, which must match the plugin ID to prevent an
    * extension to use an other extension namespace.
@@ -243,7 +241,7 @@ export namespace SecretsManager {
     const { lock, isLocked, namespace: plugins, symbols } = Private;
     const { isDisabled } = PageConfig.Extension;
     if (isLocked()) {
-      throw new Error('Secret registry is locked, check errors.');
+      throw new Error('Secrets manager is locked, check errors.');
     }
     if (isDisabled('jupyter-secrets-manager:manager')) {
       lock('Secret registry is disabled.');
@@ -309,6 +307,9 @@ namespace Private {
    * Set the connector.
    */
   export function setConnector(value: ISecretsConnector) {
+    if (connector !== null) {
+      lock('A secrets manager connector already exists.');
+    }
     connector = value;
   }
 
