@@ -3,20 +3,20 @@ import {
   JupyterFrontEndPlugin
 } from '@jupyterlab/application';
 import { SecretsManager } from './manager';
-import { ISecretsConnector, ISecretsManager } from './token';
+import { ISecretsManager } from './token';
 import { InMemoryConnector } from './connectors';
 
 /**
  * A basic secret connector extension, that should be disabled to provide a new
  * connector.
  */
-const inMemoryConnector: JupyterFrontEndPlugin<ISecretsConnector> = {
+const inMemoryConnector: JupyterFrontEndPlugin<void> = {
   id: 'jupyter-secrets-manager:connector',
   description: 'A JupyterLab extension to manage secrets.',
   autoStart: true,
-  provides: ISecretsConnector,
-  activate: (app: JupyterFrontEnd): ISecretsConnector => {
-    return new InMemoryConnector();
+  requires: [ISecretsManager],
+  activate: (app: JupyterFrontEnd, manager: ISecretsManager): void => {
+    manager.setConnector(new InMemoryConnector());
   }
 };
 
@@ -28,13 +28,9 @@ const manager: JupyterFrontEndPlugin<ISecretsManager> = {
   description: 'A JupyterLab extension to manage secrets.',
   autoStart: true,
   provides: ISecretsManager,
-  requires: [ISecretsConnector],
-  activate: (
-    app: JupyterFrontEnd,
-    connector: ISecretsConnector
-  ): ISecretsManager => {
+  activate: (app: JupyterFrontEnd): ISecretsManager => {
     console.log('JupyterLab extension jupyter-secrets-manager is activated!');
-    return new SecretsManager({ connector });
+    return new SecretsManager();
   }
 };
 

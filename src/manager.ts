@@ -10,16 +10,29 @@ import {
 } from './token';
 
 /**
- * The default secrets manager implementation.
+ * The default secrets manager.
  */
 export class SecretsManager implements ISecretsManager {
   /**
    * the secrets manager constructor.
    */
-  constructor(options: SecretsManager.IOptions) {
-    this._connector = options.connector;
+  constructor() {
     this._ready = new PromiseDelegate<void>();
     this._ready.resolve();
+  }
+
+  /**
+   * Set the connector to use with the manager.
+   *
+   * NOTE:
+   * If several extensions try to set the connector, the manager will be locked.
+   * This is to prevent malicious extensions to get passwords when they are saved.
+   */
+  setConnector(value: ISecretsConnector): void {
+    if (Private.getConnector() !== null) {
+      Private.lock('A connector was already provided to the secrets manager');
+    }
+    Private.setConnector(value);
   }
 
   get ready(): Promise<void> {
@@ -59,11 +72,12 @@ export class SecretsManager implements ISecretsManager {
     namespace: string
   ): Promise<ISecretsList | undefined> {
     this._check(token, namespace);
-    if (!this._connector.list) {
+    const connector = Private.getConnector();
+    if (!connector?.list) {
       return;
     }
     await this._ready.promise;
-    return await this._connector.list(namespace);
+    return await connector.list(namespace);
   }
 
   /**
@@ -137,31 +151,34 @@ export class SecretsManager implements ISecretsManager {
    * Actually fetch the secret from the connector.
    */
   private async _get(id: string): Promise<ISecret | undefined> {
-    if (!this._connector.fetch) {
+    const connector = Private.getConnector();
+    if (!connector?.fetch) {
       return;
     }
     await this._ready.promise;
-    return this._connector.fetch(id);
+    return connector.fetch(id);
   }
 
   /**
    * Actually save the secret using the connector.
    */
   private async _set(id: string, secret: ISecret): Promise<any> {
-    if (!this._connector.save) {
+    const connector = Private.getConnector();
+    if (!connector?.save) {
       return;
     }
-    return this._connector.save(id, secret);
+    return connector.save(id, secret);
   }
 
   /**
    * Actually remove the secrets using the connector.
    */
   async _remove(id: string): Promise<void> {
-    if (!this._connector.remove) {
+    const connector = Private.getConnector();
+    if (!connector?.remove) {
       return;
     }
-    this._connector.remove(id);
+    connector.remove(id);
   }
 
   private _onInput = async (e: Event): Promise<void> => {
@@ -202,7 +219,6 @@ export class SecretsManager implements ISecretsManager {
     }
   }
 
-  private _connector: ISecretsConnector;
   private _attachedInputs = new Map<string, HTMLInputElement>();
   private _ready: PromiseDelegate<void>;
 }
@@ -211,13 +227,6 @@ export class SecretsManager implements ISecretsManager {
  * The secrets manager namespace.
  */
 export namespace SecretsManager {
-  /**
-   * Secrets manager constructor's options.
-   */
-  export interface IOptions {
-    connector: ISecretsConnector;
-  }
-
   /**
    * A function that protect the secrets namespaces from other plugins.
    *
@@ -289,6 +298,25 @@ namespace Private {
    */
   export function isLocked(): boolean {
     return locked;
+  }
+
+  /**
+   * Connector used by the manager.
+   */
+  let connector: ISecretsConnector | null = null;
+
+  /**
+   * Set the connector.
+   */
+  export function setConnector(value: ISecretsConnector) {
+    connector = value;
+  }
+
+  /**
+   * Get the connector.
+   */
+  export function getConnector(): ISecretsConnector | null {
+    return connector;
   }
 
   /**

@@ -25,17 +25,17 @@ export interface ISecretsList<T = ISecret> {
 }
 
 /**
- * The secrets connector token.
- */
-export const ISecretsConnector = new Token<ISecretsConnector>(
-  'jupyter-secret-manager:connector',
-  'The secrets connector'
-);
-
-/**
  * The secrets manager interface.
  */
 export interface ISecretsManager {
+  /**
+   * Set the connector to use with the manager.
+   *
+   * NOTE:
+   * If several extensions try to set the connector, the manager will be locked.
+   * This is to prevent malicious extensions to get passwords when they are saved.
+   */
+  setConnector(value: ISecretsConnector): void;
   /**
    * Get a secret given its namespace and ID.
    */
