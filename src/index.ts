@@ -35,5 +35,6 @@ const manager: JupyterFrontEndPlugin<ISecretsManager> = {
 };
 
 export * from './connectors';
+export * from './manager';
 export * from './token';
 export default [inMemoryConnector, manager];
