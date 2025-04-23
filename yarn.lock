@@ -2229,7 +2229,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyterlab/coreutils@npm:^6.3.5":
+"@jupyterlab/coreutils@npm:^6.0.0, @jupyterlab/coreutils@npm:^6.3.5":
   version: 6.3.5
   resolution: "@jupyterlab/coreutils@npm:6.3.5"
   dependencies:
@@ -6801,6 +6801,7 @@ __metadata:
   dependencies:
     "@jupyterlab/application": ^4.0.0
     "@jupyterlab/builder": ^4.0.0
+    "@jupyterlab/coreutils": ^6.0.0
     "@jupyterlab/statedb": ^4.0.0
     "@jupyterlab/testutils": ^4.0.0
     "@lumino/algorithm": ^2.0.0
