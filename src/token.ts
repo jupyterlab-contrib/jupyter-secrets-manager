@@ -76,7 +76,7 @@ export interface ISecretsManager {
   /**
    * Detach the input previously attached with its namespace and ID.
    */
-  detach(token: symbol, namespace: string, id: string): void;
+  detach(token: symbol, namespace: string, id: string): Promise<void>;
   /**
    * Detach all attached input for a namespace.
    */

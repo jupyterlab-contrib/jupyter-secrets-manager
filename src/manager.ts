@@ -129,7 +129,7 @@ export class SecretsManager implements ISecretsManager {
   /**
    * Detach the input previously attached with its namespace and ID.
    */
-  detach(token: symbol, namespace: string, id: string): void {
+  async detach(token: symbol, namespace: string, id: string): Promise<void> {
     Private.checkNamespace(token, namespace);
     this._detach(Private.buildConnectorId(namespace, id));
   }
