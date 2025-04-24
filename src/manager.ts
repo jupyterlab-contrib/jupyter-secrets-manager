@@ -17,8 +17,8 @@ export class SecretsManager implements ISecretsManager {
    * the secrets manager constructor.
    */
   constructor() {
-    this._ready = new PromiseDelegate<void>();
-    this._ready.resolve();
+    this._storing = new PromiseDelegate<void>();
+    this._storing.resolve();
   }
 
   /**
@@ -30,6 +30,7 @@ export class SecretsManager implements ISecretsManager {
    */
   setConnector(value: ISecretsConnector): void {
     Private.setConnector(value);
+    this._ready.resolve();
   }
 
   get ready(): Promise<void> {
@@ -45,6 +46,7 @@ export class SecretsManager implements ISecretsManager {
     id: string
   ): Promise<ISecret | undefined> {
     this._check(token, namespace);
+    await Promise.all([this._ready.promise, await this._storing.promise]);
     return this._get(Private.buildConnectorId(namespace, id));
   }
 
@@ -58,6 +60,7 @@ export class SecretsManager implements ISecretsManager {
     secret: ISecret
   ): Promise<any> {
     this._check(token, namespace);
+    await this._ready.promise;
     return this._set(Private.buildConnectorId(namespace, id), secret);
   }
 
@@ -69,6 +72,7 @@ export class SecretsManager implements ISecretsManager {
     namespace: string
   ): Promise<ISecretsList | undefined> {
     this._check(token, namespace);
+    await Promise.all([this._ready.promise, await this._storing.promise]);
     const connector = Private.getConnector();
     if (!connector?.list) {
       return;
@@ -82,6 +86,7 @@ export class SecretsManager implements ISecretsManager {
    */
   async remove(token: symbol, namespace: string, id: string): Promise<void> {
     this._check(token, namespace);
+    await this._ready.promise;
     return this._remove(Private.buildConnectorId(namespace, id));
   }
 
@@ -119,6 +124,7 @@ export class SecretsManager implements ISecretsManager {
       }
     } else if (input.value && input.value !== secret?.value) {
       // Otherwise save the current input value using the data connector.
+      await this._ready.promise;
       this._set(attachedId, { namespace, id, value: input.value });
     }
     input.addEventListener('input', this._onInput);
@@ -152,7 +158,6 @@ export class SecretsManager implements ISecretsManager {
     if (!connector?.fetch) {
       return;
     }
-    await this._ready.promise;
     return connector.fetch(id);
   }
 
@@ -179,10 +184,10 @@ export class SecretsManager implements ISecretsManager {
   }
 
   private _onInput = async (e: Event): Promise<void> => {
-    // Wait for an hypothetic current password saving.
-    await this._ready.promise;
-    // Reset the ready status.
-    this._ready = new PromiseDelegate<void>();
+    // Wait for an hypothetic current password storing.
+    await this._storing.promise;
+    // Reset the storing status.
+    this._storing = new PromiseDelegate<void>();
     const target = e.target as HTMLInputElement;
     const attachedId = target.dataset.secretsId;
     if (attachedId) {
@@ -190,11 +195,12 @@ export class SecretsManager implements ISecretsManager {
       const namespace = splitId.shift();
       const id = splitId.join(':');
       if (namespace && id) {
+        await this._ready.promise;
         await this._set(attachedId, { namespace, id, value: target.value });
       }
     }
-    // resolve the ready status.
-    this._ready.resolve();
+    // resolve the storing status.
+    this._storing.resolve();
   };
 
   /**
@@ -217,7 +223,8 @@ export class SecretsManager implements ISecretsManager {
   }
 
   private _attachedInputs = new Map<string, HTMLInputElement>();
-  private _ready: PromiseDelegate<void>;
+  private _ready = new PromiseDelegate<void>();
+  private _storing: PromiseDelegate<void>;
 }
 
 /**
