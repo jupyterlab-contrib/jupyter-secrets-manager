@@ -112,7 +112,8 @@ export class SecretsManager implements ISecretsManager {
     }
     this._attachedInputs.set(attachedId, input);
 
-    input.dataset.secretsId = attachedId;
+    input.dataset.namespace = namespace;
+    input.dataset.secretsId = id;
     const secret = await this._get(attachedId);
     if (!input.value && secret) {
       // Fill the password if the input is empty and a value is fetched by the data
@@ -189,15 +190,12 @@ export class SecretsManager implements ISecretsManager {
     // Reset the storing status.
     this._storing = new PromiseDelegate<void>();
     const target = e.target as HTMLInputElement;
-    const attachedId = target.dataset.secretsId;
-    if (attachedId) {
-      const splitId = attachedId.split(':');
-      const namespace = splitId.shift();
-      const id = splitId.join(':');
-      if (namespace && id) {
-        await this._ready.promise;
-        await this._set(attachedId, { namespace, id, value: target.value });
-      }
+    const namespace = target.dataset.namespace;
+    const id = target.dataset.secretsId;
+    if (namespace && id) {
+      const attachedId = Private.buildConnectorId(namespace, id);
+      await this._ready.promise;
+      await this._set(attachedId, { namespace, id, value: target.value });
     }
     // resolve the storing status.
     this._storing.resolve();
