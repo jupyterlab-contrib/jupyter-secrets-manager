@@ -33,7 +33,7 @@ export interface ISecretsManager {
    *
    * NOTE:
    * If several extensions try to set the connector, the manager will be locked.
-   * This is to prevent malicious extensions to get passwords when they are saved.
+   * This is to prevent misconfiguration of competing plugins or MITM attacks.
    */
   setConnector(value: ISecretsConnector): void;
   /**
