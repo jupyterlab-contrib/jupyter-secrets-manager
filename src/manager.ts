@@ -45,9 +45,9 @@ export class SecretsManager implements ISecretsManager {
     namespace: string,
     id: string
   ): Promise<ISecret | undefined> {
-    this._check(token, namespace);
+    Private.checkNamespace(token, namespace);
     await Promise.all([this._ready.promise, await this._storing.promise]);
-    return this._get(Private.buildConnectorId(namespace, id));
+    return Private.get(Private.buildConnectorId(namespace, id));
   }
 
   /**
@@ -59,9 +59,9 @@ export class SecretsManager implements ISecretsManager {
     id: string,
     secret: ISecret
   ): Promise<any> {
-    this._check(token, namespace);
+    Private.checkNamespace(token, namespace);
     await this._ready.promise;
-    return this._set(Private.buildConnectorId(namespace, id), secret);
+    return Private.set(Private.buildConnectorId(namespace, id), secret);
   }
 
   /**
@@ -71,23 +71,18 @@ export class SecretsManager implements ISecretsManager {
     token: symbol,
     namespace: string
   ): Promise<ISecretsList | undefined> {
-    this._check(token, namespace);
+    Private.checkNamespace(token, namespace);
     await Promise.all([this._ready.promise, await this._storing.promise]);
-    const connector = Private.getConnector();
-    if (!connector?.list) {
-      return;
-    }
-    await this._ready.promise;
-    return connector.list(namespace);
+    return Private.list(namespace);
   }
 
   /**
    * Remove a secret given its namespace and ID.
    */
   async remove(token: symbol, namespace: string, id: string): Promise<void> {
-    this._check(token, namespace);
+    Private.checkNamespace(token, namespace);
     await this._ready.promise;
-    return this._remove(Private.buildConnectorId(namespace, id));
+    return Private.remove(Private.buildConnectorId(namespace, id));
   }
 
   /**
@@ -102,7 +97,7 @@ export class SecretsManager implements ISecretsManager {
     input: HTMLInputElement,
     callback?: (value: string) => void
   ): Promise<void> {
-    this._check(token, namespace);
+    Private.checkNamespace(token, namespace);
     const attachedId = Private.buildConnectorId(namespace, id);
     const attachedInput = this._attachedInputs.get(attachedId);
 
@@ -114,7 +109,7 @@ export class SecretsManager implements ISecretsManager {
 
     input.dataset.namespace = namespace;
     input.dataset.secretsId = id;
-    const secret = await this._get(attachedId);
+    const secret = await Private.get(attachedId);
     if (!input.value && secret) {
       // Fill the password if the input is empty and a value is fetched by the data
       // connector.
@@ -126,7 +121,7 @@ export class SecretsManager implements ISecretsManager {
     } else if (input.value && input.value !== secret?.value) {
       // Otherwise save the current input value using the data connector.
       await this._ready.promise;
-      this._set(attachedId, { namespace, id, value: input.value });
+      Private.set(attachedId, { namespace, id, value: input.value });
     }
     input.addEventListener('input', this._onInput);
   }
@@ -135,7 +130,7 @@ export class SecretsManager implements ISecretsManager {
    * Detach the input previously attached with its namespace and ID.
    */
   detach(token: symbol, namespace: string, id: string): void {
-    this._check(token, namespace);
+    Private.checkNamespace(token, namespace);
     this._detach(Private.buildConnectorId(namespace, id));
   }
 
@@ -143,45 +138,12 @@ export class SecretsManager implements ISecretsManager {
    * Detach all attached input for a namespace.
    */
   async detachAll(token: symbol, namespace: string): Promise<void> {
-    this._check(token, namespace);
+    Private.checkNamespace(token, namespace);
     for (const id of this._attachedInputs.keys()) {
       if (id.startsWith(`${namespace}:`)) {
         this._detach(id);
       }
     }
-  }
-
-  /**
-   * Actually fetch the secret from the connector.
-   */
-  private async _get(id: string): Promise<ISecret | undefined> {
-    const connector = Private.getConnector();
-    if (!connector?.fetch) {
-      return;
-    }
-    return connector.fetch(id);
-  }
-
-  /**
-   * Actually save the secret using the connector.
-   */
-  private async _set(id: string, secret: ISecret): Promise<any> {
-    const connector = Private.getConnector();
-    if (!connector?.save) {
-      return;
-    }
-    return connector.save(id, secret);
-  }
-
-  /**
-   * Actually remove the secrets using the connector.
-   */
-  async _remove(id: string): Promise<void> {
-    const connector = Private.getConnector();
-    if (!connector?.remove) {
-      return;
-    }
-    return connector.remove(id);
   }
 
   private _onInput = async (e: Event): Promise<void> => {
@@ -195,7 +157,7 @@ export class SecretsManager implements ISecretsManager {
     if (namespace && id) {
       const attachedId = Private.buildConnectorId(namespace, id);
       await this._ready.promise;
-      await this._set(attachedId, { namespace, id, value: target.value });
+      await Private.set(attachedId, { namespace, id, value: target.value });
     }
     // resolve the storing status.
     this._storing.resolve();
@@ -212,18 +174,12 @@ export class SecretsManager implements ISecretsManager {
     this._attachedInputs.delete(attachedId);
   }
 
-  private _check(token: symbol, namespace: string): void {
-    if (Private.isLocked() || Private.namespace.get(token) !== namespace) {
-      throw new Error(
-        `The secrets namespace ${namespace} is not available with the provided token`
-      );
-    }
-  }
-
   private _attachedInputs = new Map<string, HTMLInputElement>();
   private _ready = new PromiseDelegate<void>();
   private _storing: PromiseDelegate<void>;
 }
+
+Object.freeze(SecretsManager.prototype);
 
 /**
  * The secrets manager namespace.
@@ -243,7 +199,7 @@ export namespace SecretsManager {
     id: string,
     factory: ISecretsManager.PluginFactory<T>
   ): JupyterFrontEndPlugin<T> {
-    const { lock, isLocked, namespace: plugins, symbols } = Private;
+    const { lock, isLocked, namespaces: plugins, symbols } = Private;
     const { isDisabled } = PageConfig.Extension;
     if (isLocked()) {
       throw new Error('Secrets manager is locked, check errors.');
@@ -277,7 +233,7 @@ namespace Private {
   /**
    * The namespace associated to a symbol.
    */
-  export const namespace = new Map<symbol, string>();
+  export const namespaces = new Map<symbol, string>();
 
   /**
    * The symbol associated to a namespace.
@@ -304,6 +260,19 @@ namespace Private {
   }
 
   /**
+   *
+   * @param token - the token associated to the extension when signin.
+   * @param namespace - the namespace to check with this token.
+   */
+  export function checkNamespace(token: symbol, namespace: string): void {
+    if (isLocked() || namespaces.get(token) !== namespace) {
+      throw new Error(
+        `The secrets namespace ${namespace} is not available with the provided token`
+      );
+    }
+  }
+
+  /**
    * Connector used by the manager.
    */
   let connector: ISecretsConnector | null = null;
@@ -319,10 +288,44 @@ namespace Private {
   }
 
   /**
-   * Get the connector.
+   * Actually fetch the secret from the connector.
    */
-  export function getConnector(): ISecretsConnector | null {
-    return connector;
+  export async function get(id: string): Promise<ISecret | undefined> {
+    if (!connector?.fetch) {
+      return;
+    }
+    return connector.fetch(id);
+  }
+
+  /**
+   * Actually list the secret from the connector.
+   */
+  export async function list(
+    namespace: string
+  ): Promise<ISecretsList | undefined> {
+    if (!connector?.list) {
+      return;
+    }
+    return connector.list(namespace);
+  }
+  /**
+   * Actually save the secret using the connector.
+   */
+  export async function set(id: string, secret: ISecret): Promise<any> {
+    if (!connector?.save) {
+      return;
+    }
+    return connector.save(id, secret);
+  }
+
+  /**
+   * Actually remove the secrets using the connector.
+   */
+  export async function remove(id: string): Promise<void> {
+    if (!connector?.remove) {
+      return;
+    }
+    return connector.remove(id);
   }
 
   /**
