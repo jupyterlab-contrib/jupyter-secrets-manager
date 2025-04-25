@@ -2,6 +2,26 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.3.0
+
+([Full Changelog](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/compare/v0.2.0...96bb4980b14e8309f8524ec6c5648544287863d8))
+
+### Enhancements made
+
+- Isolate secrets from others extensions [#13](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/13) ([@brichet](https://github.com/brichet))
+
+### Documentation improvements
+
+- Add a basic description in README [#9](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/9) ([@brichet](https://github.com/brichet))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/graphs/contributors?from=2025-03-28&to=2025-04-25&type=c))
+
+[@afshin](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Aafshin+updated%3A2025-03-28..2025-04-25&type=Issues) | [@brichet](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Abrichet+updated%3A2025-03-28..2025-04-25&type=Issues) | [@trungleduc](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Atrungleduc+updated%3A2025-03-28..2025-04-25&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.2.0
 
 ([Full Changelog](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/compare/v0.1.1...fcdb370894556749ec739a619e8e105bc65e176c))
@@ -16,8 +36,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/graphs/contributors?from=2025-03-10&to=2025-03-28&type=c))
 
 [@brichet](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Abrichet+updated%3A2025-03-10..2025-03-28&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.1.1
 
