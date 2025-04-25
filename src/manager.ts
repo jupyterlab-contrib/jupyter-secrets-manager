@@ -103,16 +103,14 @@ export class SecretsManager implements ISecretsManager {
   ): Promise<void> {
     Private.checkNamespace(token, namespace);
     const attachedId = Private.buildConnectorId(namespace, id);
-    const attachedInput = this._attachedInputs.get(attachedId);
+    const attachedInput = Private.inputs.get(attachedId);
 
     // Detach the previous input.
     if (attachedInput) {
       this.detach(token, namespace, id);
     }
-    this._attachedInputs.set(attachedId, input);
-
-    input.dataset.namespace = namespace;
-    input.dataset.secretsId = id;
+    Private.inputs.set(attachedId, input);
+    Private.secretPath.set(input, { namespace, id });
     const secret = await Private.get(attachedId);
     if (!input.value && secret) {
       // Fill the password if the input is empty and a value is fetched by the data
@@ -143,9 +141,9 @@ export class SecretsManager implements ISecretsManager {
    */
   async detachAll(token: symbol, namespace: string): Promise<void> {
     Private.checkNamespace(token, namespace);
-    for (const id of this._attachedInputs.keys()) {
-      if (id.startsWith(`${namespace}:`)) {
-        this._detach(id);
+    for (const path of Private.secretPath.values()) {
+      if (path.namespace === namespace) {
+        this._detach(Private.buildConnectorId(path.namespace, path.id));
       }
     }
   }
@@ -156,8 +154,7 @@ export class SecretsManager implements ISecretsManager {
     // Reset the storing status.
     this._storing = new PromiseDelegate<void>();
     const target = e.target as HTMLInputElement;
-    const namespace = target.dataset.namespace;
-    const id = target.dataset.secretsId;
+    const { namespace, id } = Private.secretPath.get(target) ?? {};
     if (namespace && id) {
       const attachedId = Private.buildConnectorId(namespace, id);
       await this.ready;
@@ -171,14 +168,15 @@ export class SecretsManager implements ISecretsManager {
    * Actually detach of an input.
    */
   private _detach(attachedId: string): void {
-    const input = this._attachedInputs.get(attachedId);
-    if (input) {
-      input.removeEventListener('input', this._onInput);
+    const input = Private.inputs.get(attachedId);
+    if (!input) {
+      return;
     }
-    this._attachedInputs.delete(attachedId);
+    input.removeEventListener('input', this._onInput);
+    Private.secretPath.delete(input);
+    Private.inputs.delete(attachedId);
   }
 
-  private _attachedInputs = new Map<string, HTMLInputElement>();
   private _ready = new PromiseDelegate<void>();
   private _storing: PromiseDelegate<void>;
 }
@@ -334,6 +332,21 @@ namespace Private {
     }
     return connector.remove(id);
   }
+
+  export type SecretPath = {
+    namespace: string;
+    id: string;
+  };
+
+  /**
+   * The inputs elements attached to the manager.
+   */
+  export const inputs = new Map<string, HTMLInputElement>();
+
+  /**
+   * The secret path associated to an input.
+   */
+  export const secretPath = new Map<HTMLInputElement, SecretPath>();
 
   /**
    * Build the secret id from the namespace and id.
