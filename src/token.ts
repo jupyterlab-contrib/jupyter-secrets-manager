@@ -1,6 +1,7 @@
 import { JupyterFrontEndPlugin } from '@jupyterlab/application';
 import { IDataConnector } from '@jupyterlab/statedb';
 import { Token } from '@lumino/coreutils';
+import { ISignal } from '@lumino/signaling';
 
 /**
  * The secret object interface.
@@ -36,6 +37,14 @@ export interface ISecretsManager {
    * This is to prevent misconfiguration of competing plugins or MITM attacks.
    */
   setConnector(value: ISecretsConnector): void;
+  /**
+   * A signal emitting when the field visibility setting has changed.
+   */
+  readonly fieldVisibilityChanged: ISignal<ISecretsManager, boolean>;
+  /**
+   * Get the visibility of the secret fields.
+   */
+  readonly secretFieldsVisibility: boolean;
   /**
    * Get a secret given its namespace and ID.
    */

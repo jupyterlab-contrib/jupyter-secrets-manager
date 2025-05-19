@@ -7,7 +7,7 @@
       "type": "boolean",
       "title": "Show secret fields",
       "description": "Whether to show the secret fields in the UI or not",
-      "default": true
+      "default": false
     }
   },
   "additionalProperties": false

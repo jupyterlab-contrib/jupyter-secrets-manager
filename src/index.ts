@@ -58,7 +58,7 @@ const managerPlugin: JupyterFrontEndPlugin<ISecretsManager> = {
         // Otherwise listen to it to update the field visibility.
         const updateFieldVisibility = () => {
           const showSecretField =
-            settings.get('ShowSecretFields').composite ?? true;
+            settings.get('ShowSecretFields').composite ?? false;
           manager.secretFieldsVisibility = showSecretField as boolean;
         };
 
