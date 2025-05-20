@@ -28,7 +28,7 @@ export class SecretsManager implements ISecretsManager {
 
     // If the secret fields are hidden from constructor, this setting comes from
     // PageConfig, we need to lock the fields visibility.
-    if (!options.showSecretFields) {
+    if (options.showSecretFields === false) {
       Private.lockFieldsVisibility();
     }
   }
