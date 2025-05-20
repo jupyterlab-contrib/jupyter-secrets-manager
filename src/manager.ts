@@ -253,7 +253,9 @@ export namespace SecretsManager {
       throw new Error('Secrets manager is locked, check errors.');
     }
     if (isDisabled('jupyter-secrets-manager:manager')) {
-      lock('Secret registry is disabled.');
+      // If the secrets manager is disabled, we need to lock the manager, but not
+      // throw an error, to let the plugin get activated anyway.
+      lock('Secret registry is disabled.', false);
     }
     if (isDisabled(id)) {
       lock(`Sign error: plugin ${id} is disabled.`);
@@ -293,9 +295,13 @@ namespace Private {
    *
    * @param message - the error message to throw.
    */
-  export function lock(message: string) {
+  export function lock(message: string, throwError = true): void {
     locked = true;
-    throw new Error(message);
+    if (throwError) {
+      throw new Error(message);
+    } else {
+      console.warn(message);
+    }
   }
 
   /**
