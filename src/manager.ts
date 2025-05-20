@@ -8,17 +8,29 @@ import {
   ISecretsList,
   ISecretsManager
 } from './token';
+import { ISignal, Signal } from '@lumino/signaling';
+
+interface IOptions {
+  showSecretFields?: boolean;
+}
 
 /**
  * The default secrets manager.
  */
 export class SecretsManager implements ISecretsManager {
   /**
-   * the secrets manager constructor.
+   * The secrets manager constructor.
    */
-  constructor() {
+  constructor(options: IOptions) {
     this._storing = new PromiseDelegate<void>();
     this._storing.resolve();
+    Private.setSecretFieldsVisibility(options.showSecretFields ?? false);
+
+    // If the secret fields are hidden from constructor, this setting comes from
+    // PageConfig, we need to lock the fields visibility.
+    if (options.showSecretFields === false) {
+      Private.lockFieldsVisibility();
+    }
   }
 
   /**
@@ -33,12 +45,42 @@ export class SecretsManager implements ISecretsManager {
     this._ready.resolve();
   }
 
+  /**
+   * A promise that resolves when the connector is set.
+   */
   get ready(): Promise<void> {
     return this._ready.promise;
   }
 
+  /**
+   * A promise that locks the connector access during storage.
+   */
   protected get storing(): Promise<void> {
     return this._storing.promise;
+  }
+
+  /**
+   * A signal emitting when the field visibility setting has changed.
+   */
+  get fieldVisibilityChanged(): ISignal<this, boolean> {
+    return this._fieldsVisibilityChanged;
+  }
+
+  /**
+   * Get the visibility of the secret fields.
+   */
+  get secretFieldsVisibility(): boolean {
+    return Private.getSecretFieldsVisibility();
+  }
+
+  /**
+   * Set the visibility of the secret fields.
+   * The visibility cannot be set if it is locked (from page config).
+   */
+  set secretFieldsVisibility(value: boolean) {
+    if (Private.setSecretFieldsVisibility(value)) {
+      this._fieldsVisibilityChanged.emit(Private.getSecretFieldsVisibility());
+    }
   }
 
   /**
@@ -179,6 +221,7 @@ export class SecretsManager implements ISecretsManager {
 
   private _ready = new PromiseDelegate<void>();
   private _storing: PromiseDelegate<void>;
+  private _fieldsVisibilityChanged = new Signal<this, boolean>(this);
 }
 
 /**
@@ -293,7 +336,7 @@ namespace Private {
   }
 
   /**
-   * Actually fetch the secret from the connector.
+   * Fetch the secret from the connector.
    */
   export async function get(id: string): Promise<ISecret | undefined> {
     if (!connector?.fetch) {
@@ -303,7 +346,7 @@ namespace Private {
   }
 
   /**
-   * Actually list the secret from the connector.
+   * List the secret from the connector.
    */
   export async function list(
     namespace: string
@@ -314,7 +357,7 @@ namespace Private {
     return connector.list(namespace);
   }
   /**
-   * Actually save the secret using the connector.
+   * Save the secret using the connector.
    */
   export async function set(id: string, secret: ISecret): Promise<any> {
     if (!connector?.save) {
@@ -324,7 +367,7 @@ namespace Private {
   }
 
   /**
-   * Actually remove the secrets using the connector.
+   * Remove the secrets using the connector.
    */
   export async function remove(id: string): Promise<void> {
     if (!connector?.remove) {
@@ -333,6 +376,32 @@ namespace Private {
     return connector.remove(id);
   }
 
+  /**
+   * Lock the fields visibility value.
+   */
+  let fieldsVisibilityLocked = false;
+  export function lockFieldsVisibility() {
+    fieldsVisibilityLocked = true;
+  }
+
+  /**
+   * Get/set the fields visibility.
+   */
+  let secretFieldsVisibility = false;
+  export function getSecretFieldsVisibility(): boolean {
+    return secretFieldsVisibility;
+  }
+  export function setSecretFieldsVisibility(value: boolean): boolean {
+    if (!fieldsVisibilityLocked && value !== secretFieldsVisibility) {
+      secretFieldsVisibility = value;
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * The secret path type.
+   */
   export type SecretPath = {
     namespace: string;
     id: string;

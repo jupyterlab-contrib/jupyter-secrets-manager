@@ -1,0 +1,14 @@
+{
+  "title": "Secrets manager",
+  "description": "The secrets manager settings",
+  "type": "object",
+  "properties": {
+    "ShowSecretFields": {
+      "type": "boolean",
+      "title": "Show secret fields",
+      "description": "Whether to show the secret fields in the UI or not",
+      "default": false
+    }
+  },
+  "additionalProperties": false
+}

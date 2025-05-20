@@ -19,7 +19,8 @@
     "files": [
         "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
         "style/**/*.{css,js,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
-        "src/**/*.{ts,tsx}"
+        "src/**/*.{ts,tsx}",
+        "schema/*.json"
     ],
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
@@ -58,9 +59,11 @@
     "dependencies": {
         "@jupyterlab/application": "^4.0.0",
         "@jupyterlab/coreutils": "^6.0.0",
+        "@jupyterlab/settingregistry": "^4.0.0",
         "@jupyterlab/statedb": "^4.0.0",
         "@lumino/algorithm": "^2.0.0",
-        "@lumino/coreutils": "^2.1.2"
+        "@lumino/coreutils": "^2.1.2",
+        "@lumino/signaling": "^2.1.2"
     },
     "devDependencies": {
         "@jupyterlab/builder": "^4.0.0",
@@ -99,7 +102,8 @@
     },
     "jupyterlab": {
         "extension": true,
-        "outputDir": "jupyter_secrets_manager/labextension"
+        "outputDir": "jupyter_secrets_manager/labextension",
+        "schemaDir": "schema"
     },
     "eslintIgnore": [
         "node_modules",
