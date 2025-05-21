@@ -2,6 +2,26 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.4.0
+
+([Full Changelog](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/compare/v0.3.0...e9f31e6f507ef868f9591696160816d4033d06f4))
+
+### Enhancements made
+
+- Add a setting for the fields visibility [#14](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/14) ([@brichet](https://github.com/brichet))
+
+### Bugs fixed
+
+- Do not throw if the secrets manager is disabled [#16](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/16) ([@brichet](https://github.com/brichet))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/graphs/contributors?from=2025-04-25&to=2025-05-21&type=c))
+
+[@brichet](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Abrichet+updated%3A2025-04-25..2025-05-21&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.3.0
 
 ([Full Changelog](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/compare/v0.2.0...96bb4980b14e8309f8524ec6c5648544287863d8))
@@ -19,8 +39,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/graphs/contributors?from=2025-03-28&to=2025-04-25&type=c))
 
 [@afshin](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Aafshin+updated%3A2025-03-28..2025-04-25&type=Issues) | [@brichet](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Abrichet+updated%3A2025-03-28..2025-04-25&type=Issues) | [@trungleduc](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Atrungleduc+updated%3A2025-03-28..2025-04-25&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.2.0
 
