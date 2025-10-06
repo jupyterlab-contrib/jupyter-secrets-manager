@@ -295,7 +295,6 @@ namespace Private {
       constructor(entries?: readonly (readonly [K, V])[] | null) {
         this._map = Reflect.construct(MapConstructor, entries ? [entries] : []);
       }
-      s;
       get(key: K): V | undefined {
         return _get.call(this._map, key);
       }
