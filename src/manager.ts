@@ -264,7 +264,7 @@ export namespace SecretsManager {
     if (symbols.has(id)) {
       lock(`Sign error: another plugin signed as "${id}".`);
     }
-    const token = Symbol(id);
+    const token = Private.OriginalSymbol(id);
     const plugin = factory(token);
     if (id !== plugin.id) {
       lock(`Sign error: plugin ID mismatch "${plugin.id}"≠"${id}".`);
@@ -276,20 +276,86 @@ export namespace SecretsManager {
 }
 
 namespace Private {
+  namespace SafeMapNs {
+    // Capture the original Map constructor and prototype methods.
+    const MapConstructor = Object.getPrototypeOf(new Map()).constructor;
+    const _get = MapConstructor.prototype.get;
+    const _has = MapConstructor.prototype.has;
+    const _set = MapConstructor.prototype.set;
+    const _delete = MapConstructor.prototype.delete;
+    const _clear = MapConstructor.prototype.clear;
+    const _entries = MapConstructor.prototype.entries;
+    const _keys = MapConstructor.prototype.keys;
+    const _values = MapConstructor.prototype.values;
+    const _forEach = MapConstructor.prototype.forEach;
+
+    export class SafeMap<K, V> {
+      private _map: InstanceType<typeof MapConstructor>;
+
+      constructor(entries?: readonly (readonly [K, V])[] | null) {
+        this._map = Reflect.construct(MapConstructor, entries ? [entries] : []);
+      }
+      get(key: K): V | undefined {
+        return _get.call(this._map, key);
+      }
+      has(key: K): boolean {
+        return _has.call(this._map, key);
+      }
+      entries() {
+        return _entries.call(this._map);
+      }
+      keys() {
+        return _keys.call(this._map);
+      }
+      values() {
+        return _values.call(this._map);
+      }
+      forEach(cb: (v: V, k: K, m: Map<K, V>) => void) {
+        return _forEach.call(this._map, cb);
+      }
+
+      set(key: K, value: V): this {
+        _set.call(this._map, key, value);
+        return this;
+      }
+      delete(key: K): boolean {
+        return _delete.call(this._map, key);
+      }
+      clear(): void {
+        _clear.call(this._map);
+      }
+
+      get size(): number {
+        return this._map.size;
+      }
+
+      // Iterator
+      [Symbol.iterator]() {
+        return _entries.call(this._map);
+      }
+    }
+  }
+
   /**
    * Internal 'locked' status.
    */
   let locked: boolean = false;
 
   /**
+   * The original Symbol constructor, used to create unique symbols for plugin
+   * identification and namespace protection.
+   */
+  export const OriginalSymbol = Symbol;
+
+  /**
    * The namespace associated to a symbol.
    */
-  export const namespaces = new Map<symbol, string>();
+  export const namespaces = new SafeMapNs.SafeMap<symbol, string>();
 
   /**
    * The symbol associated to a namespace.
    */
-  export const symbols = new Map<string, symbol>();
+  export const symbols = new SafeMapNs.SafeMap<string, symbol>();
 
   /**
    * Lock the manager.
@@ -415,12 +481,15 @@ namespace Private {
   /**
    * The inputs elements attached to the manager.
    */
-  export const inputs = new Map<string, HTMLInputElement>();
+  export const inputs = new SafeMapNs.SafeMap<string, HTMLInputElement>();
 
   /**
    * The secret path associated to an input.
    */
-  export const secretPath = new Map<HTMLInputElement, SecretPath>();
+  export const secretPath = new SafeMapNs.SafeMap<
+    HTMLInputElement,
+    SecretPath
+  >();
 
   /**
    * Build the secret id from the namespace and id.

@@ -2,6 +2,22 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.4.1
+
+([Full Changelog](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/compare/v0.4.0...8f152f84746016509f6da37cf909d1d0564b06c1))
+
+### Enhancements made
+
+- Store original Map and Symbol [#18](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/18) ([@trungleduc](https://github.com/trungleduc))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/graphs/contributors?from=2025-05-21&to=2025-10-06&type=c))
+
+[@trungleduc](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Atrungleduc+updated%3A2025-05-21..2025-10-06&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.4.0
 
 ([Full Changelog](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/compare/v0.3.0...e9f31e6f507ef868f9591696160816d4033d06f4))
@@ -19,8 +35,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/graphs/contributors?from=2025-04-25&to=2025-05-21&type=c))
 
 [@brichet](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Abrichet+updated%3A2025-04-25..2025-05-21&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.3.0
 
