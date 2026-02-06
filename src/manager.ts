@@ -249,6 +249,7 @@ export namespace SecretsManager {
   ): JupyterFrontEndPlugin<T> {
     const { lock, isLocked, namespaces: plugins, symbols } = Private;
     const { isDisabled } = PageConfig.Extension;
+    let token: undefined | symbol = undefined;
     if (isLocked()) {
       throw new Error('Secrets manager is locked, check errors.');
     }
@@ -258,19 +259,24 @@ export namespace SecretsManager {
       console.warn('Secrets manager is disabled.');
       lock();
     }
-    if (isDisabled(id)) {
-      lock(`Sign error: plugin ${id} is disabled.`);
-    }
     if (symbols.has(id)) {
       lock(`Sign error: another plugin signed as "${id}".`);
     }
-    const token = Private.OriginalSymbol(id);
+    if (isDisabled(id)) {
+      console.warn(`Sign error: plugin ${id} is disabled.`);
+    } else {
+      token = Private.OriginalSymbol(id);
+    }
+
     const plugin = factory(token);
     if (id !== plugin.id) {
       lock(`Sign error: plugin ID mismatch "${plugin.id}"≠"${id}".`);
     }
-    plugins.set(token, id);
-    symbols.set(id, token);
+
+    if (token) {
+      plugins.set(token, id);
+      symbols.set(id, token);
+    }
     return plugin;
   }
 }

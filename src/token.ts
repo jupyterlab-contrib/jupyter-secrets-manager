@@ -98,7 +98,9 @@ export namespace ISecretsManager {
    * The argument of the factory is a symbol (unique identifier), and it returns a
    * plugin.
    */
-  export type PluginFactory<T> = (token: symbol) => JupyterFrontEndPlugin<T>;
+  export type PluginFactory<T> = (
+    token: symbol | undefined
+  ) => JupyterFrontEndPlugin<T>;
 }
 
 /**
