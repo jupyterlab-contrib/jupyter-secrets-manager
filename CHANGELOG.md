@@ -2,6 +2,36 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.5.0
+
+([Full Changelog](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/compare/v0.4.1...64837a601b6b3b2fd69f3841dcd49305574639ec))
+
+### Bugs fixed
+
+- Do not lock if plugin disabled [#26](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/26) ([@brichet](https://github.com/brichet), [@afshin](https://github.com/afshin))
+
+### Maintenance and upkeep improvements
+
+- Bump tar from 7.5.6 to 7.5.7 [#25](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/25) ([@brichet](https://github.com/brichet))
+- Bump lodash from 4.17.21 to 4.17.23 [#24](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/24) ([@brichet](https://github.com/brichet))
+- Bump lodash-es from 4.17.21 to 4.17.23 [#23](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/23) ([@brichet](https://github.com/brichet))
+- Bump tar from 7.5.3 to 7.5.6 [#22](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/22) ([@brichet](https://github.com/brichet))
+- Bump tar from 7.4.3 to 7.5.3 [#21](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/21) ([@brichet](https://github.com/brichet))
+- Update snapshots bot checkout and permission check [#20](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/20) ([@martinRenou](https://github.com/martinRenou), [@brichet](https://github.com/brichet))
+- Bump js-yaml from 3.14.1 to 3.14.2 [#19](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/19) ([@brichet](https://github.com/brichet))
+- Bump form-data from 4.0.2 to 4.0.4 [#17](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/17) ([@brichet](https://github.com/brichet))
+
+### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/use/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/graphs/contributors?from=2025-10-06&to=2026-02-06&type=c))
+
+@afshin ([activity](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Aafshin+updated%3A2025-10-06..2026-02-06&type=Issues)) | @brichet ([activity](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Abrichet+updated%3A2025-10-06..2026-02-06&type=Issues)) | @martinRenou ([activity](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3AmartinRenou+updated%3A2025-10-06..2026-02-06&type=Issues))
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.4.1
 
 ([Full Changelog](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/compare/v0.4.0...8f152f84746016509f6da37cf909d1d0564b06c1))
@@ -15,8 +45,6 @@
 ([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/graphs/contributors?from=2025-05-21&to=2025-10-06&type=c))
 
 [@trungleduc](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Atrungleduc+updated%3A2025-05-21..2025-10-06&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.4.0
 
