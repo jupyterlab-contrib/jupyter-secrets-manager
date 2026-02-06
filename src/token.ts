@@ -99,7 +99,7 @@ export namespace ISecretsManager {
    * plugin.
    */
   export type PluginFactory<T> = (
-    token: symbol | undefined
+    token: symbol | null
   ) => JupyterFrontEndPlugin<T>;
 }
 

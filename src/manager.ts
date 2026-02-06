@@ -249,7 +249,7 @@ export namespace SecretsManager {
   ): JupyterFrontEndPlugin<T> {
     const { lock, isLocked, namespaces: plugins, symbols } = Private;
     const { isDisabled } = PageConfig.Extension;
-    let token: undefined | symbol = undefined;
+    let token: null | symbol = null;
     if (isLocked()) {
       throw new Error('Secrets manager is locked, check errors.');
     }
