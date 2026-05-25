@@ -2,6 +2,41 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.5.1
+
+([Full Changelog](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/compare/v0.5.0...42319a85acf1a6e5c7243f64d2e21a4b27d18b6f))
+
+### Maintenance and upkeep improvements
+
+- Fix dependabot bump PR by specifying the package manager [#36](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/36) ([@brichet](https://github.com/brichet))
+- Bump tar from 7.5.10 to 7.5.11 [#31](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/31) ([@brichet](https://github.com/brichet))
+- Bump tar from 7.5.9 to 7.5.10 [#30](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/30) ([@brichet](https://github.com/brichet))
+- Bump ajv from 6.12.6 to 6.14.0 [#29](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/29) ([@brichet](https://github.com/brichet))
+- Bump tar from 7.5.7 to 7.5.9 [#28](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/28) ([@brichet](https://github.com/brichet))
+
+### Other merged PRs
+
+- Bump ws from 8.18.1 to 8.21.0 [#41](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/41) ([@brichet](https://github.com/brichet))
+- Bump @tootallnate/once from 2.0.0 to 2.0.1 [#40](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/40) ([@brichet](https://github.com/brichet))
+- Bump postcss from 8.5.3 to 8.5.14 [#39](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/39) ([@brichet](https://github.com/brichet))
+- Bump @babel/plugin-transform-modules-systemjs from 7.25.9 to 7.29.4 [#38](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/38) ([@brichet](https://github.com/brichet))
+- Bump fast-uri from 3.0.6 to 3.1.2 [#37](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/37) ([@brichet](https://github.com/brichet))
+- Bump lodash from 4.17.23 to 4.18.1 [#35](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/35) ([@brichet](https://github.com/brichet))
+- Bump picomatch from 2.3.1 to 2.3.2 [#34](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/34) ([@brichet](https://github.com/brichet))
+- Bump lodash-es from 4.17.23 to 4.18.1 [#33](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/33) ([@brichet](https://github.com/brichet))
+- Bump flatted from 3.3.3 to 3.4.2 [#32](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/pull/32) ([@brichet](https://github.com/brichet))
+
+### Contributors to this release
+
+The following people contributed discussions, new ideas, code and documentation contributions, and review.
+See [our definition of contributors](https://github-activity.readthedocs.io/en/latest/use/#how-does-this-tool-define-contributions-in-the-reports).
+
+([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/graphs/contributors?from=2026-02-12&to=2026-05-25&type=c))
+
+@brichet ([activity](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Abrichet+updated%3A2026-02-12..2026-05-25&type=Issues))
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.5.0
 
 ([Full Changelog](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/compare/v0.4.1...11a1fa5c6c6ceb56383f097ae9b056e62a4a8fc5))
@@ -30,8 +65,6 @@ See [our definition of contributors](https://github-activity.readthedocs.io/en/l
 ([GitHub contributors page for this release](https://github.com/jupyterlab-contrib/jupyter-secrets-manager/graphs/contributors?from=2025-10-06&to=2026-02-12&type=c))
 
 @afshin ([activity](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Aafshin+updated%3A2025-10-06..2026-02-12&type=Issues)) | @brichet ([activity](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3Abrichet+updated%3A2025-10-06..2026-02-12&type=Issues)) | @martinRenou ([activity](https://github.com/search?q=repo%3Ajupyterlab-contrib%2Fjupyter-secrets-manager+involves%3AmartinRenou+updated%3A2025-10-06..2026-02-12&type=Issues))
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.4.1
 
