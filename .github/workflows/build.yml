@@ -16,7 +16,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Base Setup
       uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
@@ -53,7 +53,7 @@ jobs:
         pip uninstall -y "jupyter_secrets_manager" jupyterlab
 
     - name: Upload extension packages
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: extension-artifacts
         path: dist/jupyter_secrets_manager*
@@ -65,11 +65,11 @@ jobs:
 
     steps:
     - name: Install Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v7
       with:
         python-version: ['3.10', '3.14']
         architecture: 'x64'
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v8
       with:
         name: extension-artifacts
     - name: Install and Test
@@ -96,13 +96,13 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Base Setup
       uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
 
     - name: Download extension package
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: extension-artifacts
 
@@ -119,7 +119,7 @@ jobs:
       run: jlpm install
 
     - name: Set up browser cache
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: |
           ${{ github.workspace }}/pw-browsers
@@ -136,7 +136,7 @@ jobs:
 
     - name: Upload Playwright Test report
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: jupyter_secrets_manager-playwright-tests
         path: |
@@ -148,6 +148,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
       - uses: jupyterlab/maintainer-tools/.github/actions/check-links@v1
